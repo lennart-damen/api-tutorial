@@ -18,7 +18,7 @@ documentation_requirements = ["sphinx", "sphinx-panels"]
 setup(
     author="Lennart Damen",
     author_email='lennart.damen@coolblue.nl',
-    python_requires='3.9.7',
+    python_requires='==3.9.7',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
