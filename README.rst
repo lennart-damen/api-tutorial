@@ -10,7 +10,9 @@ Workshop on how to deploy models on GCP
 Features
 --------
 
-* TODO
+* Tutorial, see https://docs.google.com/document/d/1i5hyI2kyxTKBSELLYPJVZjSKcm5ffgsSd3p93JJIK44/edit
+
+Don't forget to add a .env file locally!
 
 Credits
 -------
