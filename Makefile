@@ -37,4 +37,5 @@ run-container:
 	docker run\
 		-p ${OS_PORT}:${FLASK_PORT}\
 		-v ${PROJECT_DIR}/api:/usr/src/app/api\
+		-e FLASK_ENV=development\
 		${IMG_LATEST}
