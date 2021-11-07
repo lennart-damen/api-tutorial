@@ -39,3 +39,6 @@ run-container:
 		-v ${PROJECT_DIR}/api:/usr/src/app/api\
 		-e FLASK_ENV=development\
 		${IMG_LATEST}
+
+check-gcp-login:
+	gcloud config configurations list
