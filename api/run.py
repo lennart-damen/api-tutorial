@@ -1,9 +1,5 @@
 """Main module."""
-
-
-def main():
-    print("Hi!")
-
+from api import app
 
 if __name__ == "__main__":
-    main()
+    app.run()
