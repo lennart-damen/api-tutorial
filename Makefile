@@ -15,16 +15,26 @@ IMG_LATEST := ${NAME}:latest
 
 OS_PORT := 5000
 
+MKFILE_PATH := $(abspath $(firstword $(MAKEFILE_LIST)))
+PROJECT_DIR := $(shell dirname ${MKFILE_PATH})
+
 # .PHONY indicates that these make commands do not have a target file,
 # they merely execute commands
 .PHONY: build-image run-container
 
 build-image:
 	@echo "Building docker image using the latest git hash as identifier..."
-	docker build -t ${IMG_ID} --build-arg FLASK_PORT=${FLASK_PORT} --build-arg FLASK_HOST=${FLASK_HOST} .
+	docker build\
+		-t ${IMG_ID}\
+		--build-arg FLASK_PORT=${FLASK_PORT}\
+		--build-arg FLASK_HOST=${FLASK_HOST}\
+		.
 	@echo "Docker build completed"
 	docker tag ${IMG_ID} ${IMG_LATEST}
 	@echo "Tagged ${IMG_ID} as ${IMG_LATEST}."
 
 run-container:
-	docker run -p ${OS_PORT}:${FLASK_PORT} ${IMG_LATEST}
+	docker run\
+		-p ${OS_PORT}:${FLASK_PORT}\
+		-v ${PROJECT_DIR}/api:/usr/src/app/api\
+		${IMG_LATEST}
