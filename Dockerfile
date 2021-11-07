@@ -1,5 +1,11 @@
 FROM python:3.9.7-slim-bullseye
 
+ARG FLASK_HOST
+ARG FLASK_PORT
+
+ENV FLASK_HOST ${FLASK_HOST}
+ENV FLASK_PORT ${FLASK_PORT}
+
 ENV PROJECT_DIR="/usr/src/app"
 ENV FLASK_APP="$PROJECT_DIR/api/run.py"
 WORKDIR $PROJECT_DIR
@@ -9,4 +15,4 @@ COPY . .
 RUN pip install --upgrade pip &&\
     pip install --no-cache-dir .
 
-CMD [ "flask", "run", "--host=0.0.0.0", "--port=8080" ]
+CMD flask run --host=${FLASK_HOST} --port=${FLASK_PORT}
