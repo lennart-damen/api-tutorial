@@ -2,6 +2,7 @@
 # https://blog.container-solutions.com/tagging-docker-images-the-right-way
 # https://www.youtube.com/watch?v=p0KKBmfiVl0
 
+# Note: FLASK_PORT must be 8080 for Cloud Run to work!
 FLASK_PORT := 8080
 FLASK_HOST := 0.0.0.0
 DOCKER_USER := coolblue
