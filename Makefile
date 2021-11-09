@@ -52,7 +52,7 @@ conf-docker-for-gcp:
 
 # Not working because permissions: use personal account
 push-latest-image-to-gcp:
-	docker push ${GCP_IMG_ID} --project ${GCP_PROJECT_ID}
+	docker push ${GCP_IMG_ID}
 
 # Not working because billing not enabled: use personal account
 # see https://cloud.google.com/sdk/gcloud/reference/run/deploy
