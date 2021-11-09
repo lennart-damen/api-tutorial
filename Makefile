@@ -17,6 +17,7 @@ LATEST_GIT_HASH := $$(git log -1 --pretty=%h)
 GCP_IMG_NAME := gcr.io/${GCP_PROJECT_ID}/${DOCKER_PROJECT}
 GCP_IMG_ID := ${GCP_IMG_NAME}:${LATEST_GIT_HASH}
 GCP_IMG_LATEST := ${GCP_IMG_NAME}:latest
+GCP_CLOUD_RUN_NAME := ${DOCKER_PROJECT}
 
 MKFILE_PATH := $(abspath $(firstword $(MAKEFILE_LIST)))
 PROJECT_DIR := $(shell dirname ${MKFILE_PATH})
@@ -49,10 +50,20 @@ check-gcp-login:
 conf-docker-for-gcp:
 	gcloud auth configure-docker
 
-# Not working because permissions
+# Not working because permissions: use personal account
 push-latest-image-to-gcp:
-	docker push ${GCP_IMG_ID}
+	docker push ${GCP_IMG_ID} --project ${GCP_PROJECT_ID}
 
-# Not working because billing not enabled
+# Not working because billing not enabled: use personal account
+# see https://cloud.google.com/sdk/gcloud/reference/run/deploy
 deploy:
-	gcloud run deploy --image=${GCP_IMG_ID}
+	gcloud run deploy\
+		${GCP_CLOUD_RUN_NAME}\
+		--image ${GCP_IMG_ID}\
+		--project ${GCP_PROJECT_ID}\
+		--region europe-west1\
+		--allow-unauthenticated\
+		--port ${FLASK_PORT}\
+		--memory 128Mi\
+		--cpu 1\
+		--max-instances 1
