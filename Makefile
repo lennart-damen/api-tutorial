@@ -61,9 +61,24 @@ deploy:
 		${GCP_CLOUD_RUN_NAME}\
 		--image ${GCP_IMG_ID}\
 		--project ${GCP_PROJECT_ID}\
-		--region europe-west1\
+		--region ${GCP_REGION}\
 		--allow-unauthenticated\
 		--port ${FLASK_PORT}\
 		--memory 128Mi\
 		--cpu 1\
 		--max-instances 1
+
+list-cloud-run:
+	gcloud beta run services list --project ${GCP_PROJECT_ID}
+
+describe-service:
+	gcloud run services describe\
+		${DOCKER_PROJECT}\
+		--project ${GCP_PROJECT_ID}\
+		--region ${GCP_REGION}
+
+delete-deployment:
+	gcloud run services delete\
+		${DOCKER_PROJECT}\
+		--project ${GCP_PROJECT_ID}\
+		--region ${GCP_REGION}
