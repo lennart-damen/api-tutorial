@@ -52,14 +52,14 @@ conf-docker-for-gcp:
 
 # Not working because permissions: use personal account
 push-latest-image-to-gcp:
-	docker push ${GCP_IMG_ID}
+	docker push ${GCP_IMG_LATEST}
 
 # Not working because billing not enabled: use personal account
 # see https://cloud.google.com/sdk/gcloud/reference/run/deploy
 deploy:
 	gcloud run deploy\
 		${GCP_CLOUD_RUN_NAME}\
-		--image ${GCP_IMG_ID}\
+		--image ${GCP_IMG_LATEST}\
 		--project ${GCP_PROJECT_ID}\
 		--region ${GCP_REGION}\
 		--allow-unauthenticated\
@@ -82,3 +82,9 @@ delete-deployment:
 		${DOCKER_PROJECT}\
 		--project ${GCP_PROJECT_ID}\
 		--region ${GCP_REGION}
+
+list-gcp-images:
+	gcloud container images list --project ${GCP_PROJECT_ID}
+
+delete-latest-gcp-image:
+	gcloud container images delete ${GCP_IMG_LATEST}
