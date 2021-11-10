@@ -10,7 +10,7 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = ["flask==2.0.2"]
+requirements = ["flask==2.0.2", "joblib==1.1.0"]
 test_requirements = ["pytest>=3", "pytest-cov"]
 development_requirements = ["pre-commit", "bump2version"]
 documentation_requirements = ["sphinx", "sphinx-panels"]
