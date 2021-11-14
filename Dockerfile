@@ -12,6 +12,7 @@ ENV PYTHONUNBUFFERED True
 
 ENV PROJECT_DIR="/usr/src/app"
 ENV FLASK_APP="$PROJECT_DIR/api/run.py"
+ENV MODEL_PATH="$PROJECT_DIR/tests/test_artifacts/dummy_model.joblib"
 WORKDIR $PROJECT_DIR
 
 COPY . .
