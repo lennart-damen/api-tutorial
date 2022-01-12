@@ -113,5 +113,5 @@ secrets/*
 !example.env
 
 # Models
-model/*
+models/*
 !models/.gitkeep
