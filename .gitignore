@@ -104,3 +104,14 @@ ENV/
 # IDE settings
 .vscode/
 .idea/
+
+# Secrets
+secrets/*
+!secrets/.gitkeep
+
+# Example .env file
+!example.env
+
+# Models
+model/*
+!models/.gitkeep

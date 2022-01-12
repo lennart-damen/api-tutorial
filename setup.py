@@ -7,10 +7,13 @@ from setuptools import setup, find_packages
 with open("README.rst") as readme_file:
     readme = readme_file.read()
 
-with open("HISTORY.rst") as history_file:
-    history = history_file.read()
-
-requirements = ["flask==2.0.2", "joblib==1.1.0", "scikit-learn==1.0.1", "pandas==1.3.4"]
+requirements = [
+    "flask==2.0.2",
+    "joblib==1.1.0",
+    "scikit-learn==1.0.1",
+    "pandas==1.3.4",
+    "python-dotenv==0.19.2",
+]
 test_requirements = ["pytest>=3", "pytest-cov"]
 development_requirements = ["pre-commit", "bump2version"]
 documentation_requirements = ["sphinx", "sphinx-panels"]
@@ -34,7 +37,7 @@ setup(
         "docs": documentation_requirements,
     },
     license="MIT license",
-    long_description=readme + "\n\n" + history,
+    long_description=readme,
     include_package_data=True,
     keywords="deployment_workshop",
     name="deployment_workshop",

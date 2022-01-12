@@ -1,4 +1,11 @@
-from api import app, model
+# Insanely useful article on Medium, search for:
+# We’ll Do It Live: Updating Machine Learning
+# Models on Flask/uWSGI with No Downtime
+
+# Or just use GCP Vertex AI/AI Platform :)
+
+import os
+from api import app, utils
 from flask import request, jsonify
 import pandas as pd
 
@@ -23,3 +30,10 @@ def predict():
     response = {"predictions": y_hat}
     response = jsonify(response)
     return response
+
+
+@app.route("/load_model", methods=["GET"])
+def load_model():
+    global model
+    model = utils.load_model_from_filesystem(path=os.getenv("MODEL_PATH"))
+    return jsonify(success=True)

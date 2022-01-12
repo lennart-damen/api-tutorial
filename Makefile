@@ -4,11 +4,6 @@
 
 include .env
 
-# Note: FLASK_PORT must be 8080 for Cloud Run to work!
-FLASK_PORT := 8080
-FLASK_HOST := 0.0.0.0
-OS_PORT := 5000
-
 LATEST_GIT_HASH := $$(git log -1 --pretty=%h)
 
 # Note: make sure GCP_PROJECT_ID and DOCKER_PROJECT
@@ -24,7 +19,10 @@ PROJECT_DIR := $(shell dirname ${MKFILE_PATH})
 
 # .PHONY indicates that these make commands do not have a target file,
 # they merely execute commands
-.PHONY: build-image run-container check-gcp-login conf-docker-for-gcp push-latest-image-to-gcp deploy
+.PHONY: build-image run-container check-gcp-login conf-docker-for-gcp push-latest-image-to-gcp deploy add-roles-to-service-account
+
+run-flask:
+	python api/run.py
 
 build-image:
 	@echo "Building docker image locally using GCP tag..."
@@ -40,23 +38,46 @@ build-image:
 run-container:
 	docker run\
 		-p ${OS_PORT}:${FLASK_PORT}\
-		-v ${PROJECT_DIR}/api:/usr/src/app/api\
-		-e FLASK_ENV=development\
+		-v ${PROJECT_DIR}/api:${DOCKER_BASE_DIR}/api\
+		-e FLASK_ENV=${FLASK_ENV}\
 		${GCP_IMG_LATEST}
 
 check-gcp-login:
 	gcloud config configurations list
 
+create-service-account:
+	gcloud iam service-accounts create\
+		${GCP_SERVICE_ACCOUNT_NAME}\
+		--project ${GCP_PROJECT_ID}\
+
+delete-service-account:
+	gcloud iam service-accounts delete\
+		${GCP_SERVICE_ACCOUNT_EMAIL}\
+		--project ${GCP_PROJECT_ID}\
+
+add-roles:
+	echo ${GCP_PROJECT_ID}
+	${PROJECT_DIR}/scripts/add_roles_to_service_account.sh
+
+create-key:
+	gcloud iam service-accounts keys create\
+		${GCP_KEY_PATH}\
+		--iam-account=${GCP_SERVICE_ACCOUNT_EMAIL}
+
+create-config:
+	gcloud config configurations create ${GCP_PROJECT_ID}-service-account
+	gcloud auth activate-service-account ${GCP_SERVICE_ACCOUNT_EMAIL} --key-file=${GCP_KEY_PATH}
+
 conf-docker-for-gcp:
 	gcloud auth configure-docker
 
-# Not working because permissions: use personal account
-push-latest-image-to-gcp:
+image-to-gcp:
 	docker push ${GCP_IMG_LATEST}
 
 # Not working because billing not enabled: use personal account
 # see https://cloud.google.com/sdk/gcloud/reference/run/deploy
 deploy:
+	gcloud config configurations list
 	gcloud run deploy\
 		${GCP_CLOUD_RUN_NAME}\
 		--image ${GCP_IMG_LATEST}\

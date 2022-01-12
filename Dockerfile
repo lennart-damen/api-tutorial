@@ -10,10 +10,9 @@ ENV FLASK_ENV production
 # Allow statements and log messages to immediately appear in the Knative logs
 ENV PYTHONUNBUFFERED True
 
-ENV PROJECT_DIR="/usr/src/app"
-ENV FLASK_APP="$PROJECT_DIR/api/run.py"
-ENV MODEL_PATH="$PROJECT_DIR/tests/test_artifacts/dummy_model.joblib"
-WORKDIR $PROJECT_DIR
+ENV FLASK_APP="$DOCKER_PROJECT_DIR/api/run.py"
+ENV MODEL_PATH="$DOCKER_PROJECT_DIR/$MODEL_PATH"
+WORKDIR $DOCKER_PROJECT_DIR
 
 COPY . .
 
