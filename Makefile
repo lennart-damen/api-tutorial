@@ -6,9 +6,6 @@ include .env
 
 LATEST_GIT_HASH := $$(git log -1 --pretty=%h)
 
-# Note: make sure GCP_PROJECT_ID and DOCKER_PROJECT
-# are defined in the .env file. Exclude the .env from
-# source control!
 GCP_IMG_NAME := gcr.io/${GCP_PROJECT_ID}/${DOCKER_PROJECT}
 GCP_IMG_ID := ${GCP_IMG_NAME}:${LATEST_GIT_HASH}
 GCP_IMG_LATEST := ${GCP_IMG_NAME}:latest
@@ -21,8 +18,18 @@ PROJECT_DIR := $(shell dirname ${MKFILE_PATH})
 # they merely execute commands
 .PHONY: build-image run-container check-gcp-login conf-docker-for-gcp push-latest-image-to-gcp deploy add-roles-to-service-account
 
-run-flask:
+run-flask-dev:
 	python api/run.py
+
+# Couldnt figure out how to load environment
+# variables into uwsgi.ini, but this works
+run-flask-uwsgi:
+	uwsgi\
+		--socket ${FLASK_HOST}:${FLASK_PORT}\
+		--protocol ${UWSGI_PROTOCOL}\
+		--module api:app\
+		--threads ${UWSGI_THREADS}\
+		--processes ${UWSGI_PROCESSES}
 
 build-image:
 	@echo "Building docker image locally using GCP tag..."
@@ -30,6 +37,11 @@ build-image:
 		-t ${GCP_IMG_ID}\
 		--build-arg FLASK_PORT=${FLASK_PORT}\
 		--build-arg FLASK_HOST=${FLASK_HOST}\
+		--build-arg DOCKER_PROJECT_DIR=${DOCKER_PROJECT_DIR}\
+		--build-arg MODEL_PATH=${MODEL_PATH}\
+		--build-arg UWSGI_PROTOCOL=${UWSGI_PROTOCOL}\
+		--build-arg UWSGI_THREADS=${UWSGI_THREADS}\
+		--build-arg UWSGI_PROCESSES=${UWSGI_PROCESSES}\
 		.
 	@echo "Docker build completed"
 	docker tag ${GCP_IMG_ID} ${GCP_IMG_LATEST}
@@ -38,7 +50,7 @@ build-image:
 run-container:
 	docker run\
 		-p ${OS_PORT}:${FLASK_PORT}\
-		-v ${PROJECT_DIR}/api:${DOCKER_BASE_DIR}/api\
+		-v ${PROJECT_DIR}:${DOCKER_PROJECT_DIR}\
 		-e FLASK_ENV=${FLASK_ENV}\
 		${GCP_IMG_LATEST}
 
@@ -77,7 +89,6 @@ image-to-gcp:
 # Not working because billing not enabled: use personal account
 # see https://cloud.google.com/sdk/gcloud/reference/run/deploy
 deploy:
-	gcloud config configurations list
 	gcloud run deploy\
 		${GCP_CLOUD_RUN_NAME}\
 		--image ${GCP_IMG_LATEST}\

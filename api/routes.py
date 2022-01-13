@@ -5,7 +5,7 @@
 # Or just use GCP Vertex AI/AI Platform :)
 
 import os
-from api import app, utils
+from api import app, utils, model
 from flask import request, jsonify
 import pandas as pd
 
@@ -32,6 +32,7 @@ def predict():
     return response
 
 
+# TODO: This will not work when spawning multiple processes
 @app.route("/load_model", methods=["GET"])
 def load_model():
     global model

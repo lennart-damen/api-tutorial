@@ -12,5 +12,6 @@ load_dotenv()
 DEBUG = True if os.getenv("FLASK_ENV") == "development" else False
 
 app = Flask(__name__)
+model = utils.load_model_from_filesystem(path=os.getenv("MODEL_PATH"))
 
 from api import routes  # noqa: E402
