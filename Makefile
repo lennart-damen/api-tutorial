@@ -96,9 +96,9 @@ deploy:
 		--region ${GCP_REGION}\
 		--allow-unauthenticated\
 		--port ${FLASK_PORT}\
-		--memory 128Mi\
-		--cpu 1\
-		--max-instances 1
+		--memory ${CLOUD_RUN_MEMORY}\
+		--cpu ${CLOUD_RUN_CPU}\
+		--max-instances ${CLOUD_RUN_MAX_INSTANCES}
 
 list-cloud-run:
 	gcloud beta run services list --project ${GCP_PROJECT_ID}
