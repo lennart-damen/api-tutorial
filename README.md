@@ -36,8 +36,8 @@ Enjoy the read!
 
 ## Setting up GCP
 If you are new to GCP:
-- make an account
-- Set up billing
+- Create [an account](https://accounts.google.com/signup/v2/webcreateaccount?hl=en&flowName=GlifWebSignIn&flowEntry=SignUp)
+- Set up billing. Go to the [Cloud Console](console.cloud.google.com). In the top of the screen you can see a pop-up.
     - In January 2022, you got 300 dollars as free trial. After the trial amount runs out,
 GCP will ask you to enable billing before charging you anything
 - Download and install the [Google Cloud SDK](https://cloud.google.com/sdk/docs/install)
@@ -55,7 +55,9 @@ in Cloud Console (make sure you've selected the right project).
 
 ## Setting up the GCP service account
 To avoid accidentally starting/stopping services on different projects, we will create a new GCP service
-account that only has the minimal roles required for model deployment.
+account that only has the minimal roles required for model deployment. For this, you need IAM Admin rights.
+If you just created a new account and project, you will have those rights by default. If you are using
+the account from your organization, ask your security department for help.
 - Think of a name for you service account (e.g. "machine-learning-api")
 - Add the GCP_SERVICE_ACCOUNT_NAME variable to the .env file. Remember to read the .env variables by repeating
 ``source .env``
