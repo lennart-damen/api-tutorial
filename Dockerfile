@@ -17,11 +17,12 @@ RUN apt-get update && \
     apt-get -y install gcc mono-mcs && \
     rm -rf /var/lib/apt/lists/*
 
-ENV FLASK_APP="DOCKER_PROJECT_DIR/api/run.py"
 ENV MODEL_PATH="$DOCKER_PROJECT_DIR/$MODEL_PATH"
-
 WORKDIR $DOCKER_PROJECT_DIR
-COPY . .
+
+COPY setup.py .
+COPY setup.cfg .
+COPY README.md .
 
 RUN pip install --upgrade pip &&\
     pip install --no-cache-dir .
@@ -33,6 +34,12 @@ ENV UWSGI_PROTOCOL ${UWSGI_PROTOCOL}
 ENV UWSGI_THREADS ${UWSGI_THREADS}
 ENV UWSGI_PROCESSES ${UWSGI_PROCESSES}
 
+COPY Makefile .
+COPY ./api ./api
+COPY ./models ./models
+
+# TODO: Docker container will not execute 'make' command, not sure why
+# Just use the uwsgi command instead
 CMD uwsgi\
         --socket ${FLASK_HOST}:${FLASK_PORT}\
         --protocol ${UWSGI_PROTOCOL}\

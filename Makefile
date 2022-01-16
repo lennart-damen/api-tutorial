@@ -79,6 +79,8 @@ create-key:
 create-config:
 	gcloud config configurations create ${GCP_PROJECT_ID}-service-account
 	gcloud auth activate-service-account ${GCP_SERVICE_ACCOUNT_EMAIL} --key-file=${GCP_KEY_PATH}
+	gcloud config set project ${GCP_PROJECT_ID}
+	gcloud config set compute/region ${GCP_REGION}
 
 conf-docker-for-gcp:
 	gcloud auth configure-docker

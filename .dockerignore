@@ -105,6 +105,11 @@ ENV/
 .vscode/
 .idea/
 
-# Data
-data/deployment_workshop/*
-!data/deployment_workshop/.gitkeep
+# Secrets
+secrets/*
+!secrets/.gitkeep
+
+# Example .env file
+!example.env
+
+# Dont ignore the model!
